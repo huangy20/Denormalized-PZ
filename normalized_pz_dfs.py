@@ -132,9 +132,10 @@ def exp_nmpz_intersect_dfs(start_idx, end_idx, dirs_with_bvals,
             start_time = time.time()
             check_result = nmpz_intersection(G, E, c, b_val, max_depth=max_depth, mem_track=mem_track)
             end_time = time.time()
+            time_usage = end_time - start_time
             if print:
-                print_result(check_result=check_result, i=i)
-            results[set_idx, dir_w_b_idx, 0] = end_time - start_time # Store the time
+                print_result(check_result=check_result, i=i, time_usage=time_usage)
+            results[set_idx, dir_w_b_idx, 0] = time_usage # Store the time
             results[set_idx, dir_w_b_idx, 1] = int(mem_track[0]) # Store the memory 
             # Store the corresponding number of results. 
             if check_result is True:
@@ -144,5 +145,5 @@ def exp_nmpz_intersect_dfs(start_idx, end_idx, dirs_with_bvals,
             elif check_result is None:
                 results[set_idx, dir_w_b_idx, 4] += 1
     if save:
-        np.savez(f'Results/{dataset}_nmpz_dfs.npz', results=results)
+        np.savez(f'Results/{dataset}_nmpz_dfs_maxdepth_{max_depth}.npz', results=results)
     return results
