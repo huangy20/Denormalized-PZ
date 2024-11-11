@@ -41,15 +41,15 @@ def print_result(check_result, i, time_usage):
     elif check_result is None:
         print(f"Case {i}: Inconclusive result - reached maximum recursion depth." + time_str)
 
-def demo_result(dataset, methods, max_depth, dirs_with_bvals, plot=True):
+def demo_result(dataset, methods, max_depths, dirs_with_bvals, plot=True):
      # Each result need to store: 0) computational time, 1) memory usage, 
     #  2) # intersections, 3) # no intersections, 4) # undecidedable cases
     if plot:
         plt.figure(figsize=(10, 6))
         colors = ['r', 'b']
-
+    assert len(methods) == len(max_depths), "Methods and max_depths do not have the same length"
     for m, method in enumerate(methods):
-        results_fn_prefix = f"{dataset}_{method}_maxdepth_{max_depth}"
+        results_fn_prefix = f"{dataset}_{method}_maxdepth_{max_depths[m]}"
         results_fn = "./Results/" + results_fn_prefix + ".npz"
         results = np.load(results_fn)['results']
         if plot:
