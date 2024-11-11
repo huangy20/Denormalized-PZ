@@ -5,21 +5,25 @@ import os
 from collections import defaultdict
 import matplotlib.pyplot as plt
 
-def load(file_path_E,file_path_G):
+def load(file_path_E, file_path_G, file_path_c, file_path_GI):
     data = scipy.io.loadmat(file_path_E)
     E = data['E'].transpose()
     E *= 2
 
     data = scipy.io.loadmat(file_path_G)
     G = data['G'].transpose()
-    return G,E,E.shape[1]
 
-def check_half_space_intersection(G, beta_min, beta_max, c, b):
-    '''
-    '''
+    data = scipy.io.loadmat(file_path_c)
+    center = data['c']
+
+    data = scipy.io.loadmat(file_path_GI)
+    GI = data['GI'].transpose()
+    return G, E, center, GI, E.shape[1]
+
+def check_half_space_intersection(G, beta_min, beta_max, c, b, adjusted_value):
     cG = G @ c
     min_value = np.sum(np.where(cG >= 0, beta_min * cG, beta_max * cG))
-    return min_value <= b
+    return min_value + adjusted_value <= b
 
 def generate_pascal_triangle(n):
     """ Generate Pascal's triangle up to the n-th row. """
@@ -44,19 +48,19 @@ def print_result(check_result, i, time_usage):
 def demo_result(dataset, methods, max_depths, dirs_with_bvals, plot=True):
      # Each result need to store: 0) computational time, 1) memory usage, 
     #  2) # intersections, 3) # no intersections, 4) # undecidedable cases
-    if plot:
-        plt.figure(figsize=(10, 6))
-        colors = ['r', 'b']
-    assert len(methods) == len(max_depths), "Methods and max_depths do not have the same length"
-    for m, method in enumerate(methods):
-        results_fn_prefix = f"{dataset}_{method}_maxdepth_{max_depths[m]}"
-        results_fn = "./Results/" + results_fn_prefix + ".npz"
-        results = np.load(results_fn)['results']
+    dirs_len = len(dirs_with_bvals)
+    for dir_idx in range(dirs_len):
         if plot:
-            plt_x = np.arange(results.shape[0])
-           
-        dirs_len = len(dirs_with_bvals)
-        for dir_idx in range(dirs_len):
+            plt.figure(figsize=(10, 6))
+            colors = ['r', 'b']
+        assert len(methods) == len(max_depths), "Methods and max_depths do not have the same length"
+        for m, method in enumerate(methods):
+            results_fn_prefix = f"{dataset}_{method}_maxdepth_{max_depths[m]}"
+            results_fn = "./Results/" + results_fn_prefix + ".npz"
+            results = np.load(results_fn)['results']
+            if plot:
+                plt_x = np.arange(results.shape[0])
+                
             total_time = np.sum(results[:, dir_idx, 0])
             num_intersect = np.sum(results[:, dir_idx, 2])
             num_no_intersect = np.sum(results[:, dir_idx, 3])
@@ -65,16 +69,16 @@ def demo_result(dataset, methods, max_depths, dirs_with_bvals, plot=True):
             print(f"Total time: {total_time}s, Num Intersect: {num_intersect}, \
                 Num No Intersect: {num_no_intersect}, Num Undecidable: {num_undecidable}")
             if plot:
-                plt.plot(plt_x, results[:, dir_idx, 0], label=f'{method}_time', 
-                         color=colors[m], linestyle='-')
-                plt.plot(plt_x, results[:, dir_idx, 1], label=f'{method}_mem', 
-                         color=colors[m], linestyle='--')
-    
-    if plot:
-        # Label the plot
-        plt.xlabel('Over All Sets')
-        plt.ylabel('Time/Memory')
-        plt.title('Time and memory usage comparison')
-        plt.legend()
-        plt.show()
+                plt.semilogy(plt_x, results[:, dir_idx, 0], label=f'{method}_time', 
+                            color=colors[m], linestyle='-')
+                plt.semilogy(plt_x, results[:, dir_idx, 1], label=f'{method}_mem', 
+                            color=colors[m], linestyle='--')
+        
+        if plot:
+            # Label the plot
+            plt.xlabel('Over All Sets')
+            plt.ylabel('Time/Memory')
+            plt.title('Time and memory usage comparison')
+            plt.legend()
+            plt.show()
     
