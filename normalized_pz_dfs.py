@@ -56,7 +56,7 @@ def split_dependent_factor(G, E, ind, polyOrd):
     E2, G2 = removeRedundantExponents(E2, G2)
     return G1, G2, E1, E2
 
-def nmpz_intersection(G, E, c, b_val, mem_track, polyOrd=12, depth=0, max_depth=10, last_index=-1):
+def nmpz_intersection(G, E, c, b_val, mem_track, polyOrd=12, depth=0, max_depth=15, last_index=-1):
     if depth > max_depth:  
         return None  
 
@@ -87,7 +87,7 @@ def nmpz_intersection(G, E, c, b_val, mem_track, polyOrd=12, depth=0, max_depth=
 
 
 def exp_nmpz_intersect_dfs(start_idx, end_idx, dirs_with_bvals, 
-                           dataset='VanDelPol', max_depth=15, print=True):
+                           dataset='VanDelPol', max_depth=15, print=True, save=True):
     '''
     This is the experiment wrapper for doing intersection checking using normalized pz with dfs approach
     over all the directions.
@@ -124,14 +124,13 @@ def exp_nmpz_intersect_dfs(start_idx, end_idx, dirs_with_bvals,
             mem_track = np.array([init_mem])
 
             # Extact the corresponding direction and b_val
-            c = dir_w_b[0]
+            c = np.array(dir_w_b[0])
             b_val = dir_w_b[1]
             # Define the interval bounds a and b, and the half-space parameters c and b_val
             a = np.zeros(size)
             b = np.ones(size)
             start_time = time.time()
-            check_result = nmpz_intersection(G, a, b, E, c, b_val, 
-                                             max_depth=max_depth, mem_track=mem_track)
+            check_result = nmpz_intersection(G, E, c, b_val, max_depth=max_depth, mem_track=mem_track)
             end_time = time.time()
             if print:
                 print_result(check_result=check_result, i=i)
@@ -144,4 +143,6 @@ def exp_nmpz_intersect_dfs(start_idx, end_idx, dirs_with_bvals,
                 results[set_idx, dir_w_b_idx, 3] += 1
             elif check_result is None:
                 results[set_idx, dir_w_b_idx, 4] += 1
+    if save:
+        np.savez(f'Results/{dataset}_nmpz_dfs.npz', results=results)
     return results

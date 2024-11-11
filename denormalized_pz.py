@@ -46,7 +46,8 @@ def depz_intersection(G, a, b, E, c, b_val, mem_track,
 
 
 
-def exp_depz_intersect(start_idx, end_idx, dirs_with_bvals, dataset='VanDelPol', max_depth=15, print=True):
+def exp_depz_intersect(start_idx, end_idx, dirs_with_bvals, 
+                       dataset='VanDelPol', max_depth=15, print=True, save=True):
     '''
     This is the experiment wrapper for doing intersection checking using denormalized pz 
     over all the directions.
@@ -83,7 +84,7 @@ def exp_depz_intersect(start_idx, end_idx, dirs_with_bvals, dataset='VanDelPol',
             mem_track = np.array([init_mem])
 
             # Extact the corresponding direction and b_val
-            c = dir_w_b[0]
+            c = np.array(dir_w_b[0])
             b_val = dir_w_b[1]
             # Define the interval bounds a and b, and the half-space parameters c and b_val
             a = np.zeros(size)
@@ -103,4 +104,6 @@ def exp_depz_intersect(start_idx, end_idx, dirs_with_bvals, dataset='VanDelPol',
                 results[set_idx, dir_w_b_idx, 3] += 1
             elif check_result is None:
                 results[set_idx, dir_w_b_idx, 4] += 1
+    if save:
+        np.savez(f'Results/{dataset}_depz.npz', results=results)
     return results
