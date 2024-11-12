@@ -53,13 +53,13 @@ def depz_intersection(G, a, b, E, c, b_val, adjusted_vector, adjusted_value, mem
         return False
     
     # Check whether there exist a point in the set already intersect the hyperplane
-    middle_point = middle_point_polynomial_zonotope_with_dom(G, a, b, E, adjusted_vector=adjusted_vector)
+    middle_point = middle_point_polynomial_zonotope_with_dom(G, a, b, E, adjusted_vector=adjusted_vector, dir=c)
     if np.dot(c, middle_point) <= b_val:
         return True
     
     # Do the cyclic splitting here
     split_index = (last_index + 1) % len(a)
-
+    
     # Do the splitting here
     split_a_1, split_b_1 = a.copy(), b.copy()
     split_b_1[split_index] = (a[split_index] + b[split_index]) / 2

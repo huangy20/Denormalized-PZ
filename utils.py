@@ -45,19 +45,20 @@ def print_result(check_result, i, time_usage):
     elif check_result is None:
         print(f"Case {i}: Inconclusive result - reached maximum recursion depth." + time_str)
 
-def demo_result(dataset, methods, exps, plot=True, colors=None):
-     # Loop through all the methods, then for each method, plot all the experiments in a single plot
-     # Total of num_methods * num_experiments colors
+def demo_result(dataset, methods, methods_exps, plot=True):
+    # Loop through all the methods, then for each method, plot all the experiments in a single plot
+    # Total of num_methods * num_experiments colors
+    assert len(methods) == len(methods_exps), "Numer of methods and methods experiments do not match"
     if plot:
         plt.figure(figsize=(10, 6))
-        colors = plt.cm.viridis(np.linspace(0, 1, len(methods) * len(exps)))
-    exp_num = len(exps)
+        colors = plt.cm.viridis(np.linspace(0, 1, len(methods_exps) * len(methods_exps[0])))
     # Loop through all the methods
     for m, method in enumerate(methods):
         results_fn_prefix = f"{dataset}_{method}"
         results_fn = "./Results/" + results_fn_prefix + ".npz"
         results = np.load(results_fn)['results']
-
+        exps = methods_exps[m]
+        exp_num = len(exps)
         # Loop through all the experiments
         for exp_idx, exp in enumerate(exps):
             if plot:
@@ -76,12 +77,12 @@ def demo_result(dataset, methods, exps, plot=True, colors=None):
                 plt.semilogy(plt_x, results[:, exp_idx, 1], label=f'{method}_mem', 
                             color=colors[m*exp_num+exp_idx], linestyle='--')
     if plot:
-            # Label the plot
-            plt.xlabel('Reachable Sets')
-            plt.ylabel('Time and Memory Result')
-            plt.title(f'Time and memory usage comparison for {dataset}')
-            plt.legend()
-            plt.show()
+        # Label the plot
+        plt.xlabel('Reachable Sets')
+        plt.ylabel('Time and Memory Result')
+        plt.title(f'Time and memory usage comparison for {dataset}')
+        plt.legend()
+        plt.show()
     
         
     
