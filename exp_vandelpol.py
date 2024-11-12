@@ -1,9 +1,13 @@
 from denormalized_pz import *
 from normalized_pz_dfs import *
 
+#depz_exps = [([1, 0], -2.0165, 10), ([-1, 0], -2.138, 10), ([0, 1], -2.73, 10), ([0, -1], -2.804, 10)]
+#nmpz_exps = [([1, 0], -2.0165, 10), ([-1, 0], -2.138, 10), ([0, 1], -2.73, 10), ([0, -1], -2.804, 10)]
+
+
 dataset = 'VanDelPol'
-depz_exps = [([1.0, 0.0], -0.20165, 40)]
-nmpz_exps = [([1.0, 0.0], -0.20165, 10)]
+depz_exps = [([1, 0], -2.0165, 10)]
+nmpz_exps = [([1, 0], -2.0165, 10)]
 start_idx = 1
 end_idx = 1349
 

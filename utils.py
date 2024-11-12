@@ -53,6 +53,7 @@ def demo_result(dataset, methods, methods_exps, plot=True):
         plt.figure(figsize=(10, 6))
         colors = plt.cm.viridis(np.linspace(0, 1, len(methods_exps) * len(methods_exps[0])))
     # Loop through all the methods
+    line_style = ['-', '--']
     for m, method in enumerate(methods):
         results_fn_prefix = f"{dataset}_{method}"
         results_fn = "./Results/" + results_fn_prefix + ".npz"
@@ -72,10 +73,10 @@ def demo_result(dataset, methods, methods_exps, plot=True):
             print(f"Total time: {total_time}s, Num Intersect: {num_intersect}, \
                 Num No Intersect: {num_no_intersect}, Num Undecidable: {num_undecidable}, max depth: {max_depth}")
             if plot:
-                plt.semilogy(plt_x, results[:, exp_idx, 0], label=f'{method}_time', 
-                            color=colors[m*exp_num+exp_idx], linestyle='-')
+                #plt.semilogy(plt_x, results[:, exp_idx, 0], label=f'{method}_time', 
+                #            color=colors[m*exp_num+exp_idx], linestyle='-')
                 plt.semilogy(plt_x, results[:, exp_idx, 1], label=f'{method}_mem', 
-                            color=colors[m*exp_num+exp_idx], linestyle='--')
+                         color=colors[m*exp_num+exp_idx], linestyle=line_style[m])
     if plot:
         # Label the plot
         plt.xlabel('Reachable Sets')
