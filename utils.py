@@ -45,40 +45,43 @@ def print_result(check_result, i, time_usage):
     elif check_result is None:
         print(f"Case {i}: Inconclusive result - reached maximum recursion depth." + time_str)
 
-def demo_result(dataset, methods, max_depths, dirs_with_bvals, plot=True):
-     # Each result need to store: 0) computational time, 1) memory usage, 
-    #  2) # intersections, 3) # no intersections, 4) # undecidedable cases
-    dirs_len = len(dirs_with_bvals)
-    for dir_idx in range(dirs_len):
-        if plot:
-            plt.figure(figsize=(10, 6))
-            colors = ['r', 'b']
-        assert len(methods) == len(max_depths), "Methods and max_depths do not have the same length"
-        for m, method in enumerate(methods):
-            results_fn_prefix = f"{dataset}_{method}_maxdepth_{max_depths[m]}"
-            results_fn = "./Results/" + results_fn_prefix + ".npz"
-            results = np.load(results_fn)['results']
+def demo_result(dataset, methods, exps, plot=True, colors=None):
+     # Loop through all the methods, then for each method, plot all the experiments in a single plot
+     # Total of num_methods * num_experiments colors
+    if plot:
+        plt.figure(figsize=(10, 6))
+        colors = plt.cm.viridis(np.linspace(0, 1, len(methods) * len(exps)))
+    exp_num = len(exps)
+    # Loop through all the methods
+    for m, method in enumerate(methods):
+        results_fn_prefix = f"{dataset}_{method}"
+        results_fn = "./Results/" + results_fn_prefix + ".npz"
+        results = np.load(results_fn)['results']
+
+        # Loop through all the experiments
+        for exp_idx, exp in enumerate(exps):
             if plot:
                 plt_x = np.arange(results.shape[0])
-                
-            total_time = np.sum(results[:, dir_idx, 0])
-            num_intersect = np.sum(results[:, dir_idx, 2])
-            num_no_intersect = np.sum(results[:, dir_idx, 3])
-            num_undecidable = np.sum(results[:, dir_idx, 4])
-            print(f"For problem {results_fn_prefix}, with {dir_idx}-th direction has the following results:")
+            max_depth = exp[2]
+            total_time = np.sum(results[:, exp_idx, 0])
+            num_intersect = np.sum(results[:, exp_idx, 2])
+            num_no_intersect = np.sum(results[:, exp_idx, 3])
+            num_undecidable = np.sum(results[:, exp_idx, 4])
+            print(f"For problem {results_fn_prefix}, with {exp_idx}-th experiment has the following results:")
             print(f"Total time: {total_time}s, Num Intersect: {num_intersect}, \
-                Num No Intersect: {num_no_intersect}, Num Undecidable: {num_undecidable}")
+                Num No Intersect: {num_no_intersect}, Num Undecidable: {num_undecidable}, max depth: {max_depth}")
             if plot:
-                plt.semilogy(plt_x, results[:, dir_idx, 0], label=f'{method}_time', 
-                            color=colors[m], linestyle='-')
-                plt.semilogy(plt_x, results[:, dir_idx, 1], label=f'{method}_mem', 
-                            color=colors[m], linestyle='--')
-        
-        if plot:
+                plt.semilogy(plt_x, results[:, exp_idx, 0], label=f'{method}_time', 
+                            color=colors[m*exp_num+exp_idx], linestyle='-')
+                plt.semilogy(plt_x, results[:, exp_idx, 1], label=f'{method}_mem', 
+                            color=colors[m*exp_num+exp_idx], linestyle='--')
+    if plot:
             # Label the plot
-            plt.xlabel('Over All Sets')
-            plt.ylabel('Time/Memory')
-            plt.title('Time and memory usage comparison')
+            plt.xlabel('Reachable Sets')
+            plt.ylabel('Time and Memory Result')
+            plt.title(f'Time and memory usage comparison for {dataset}')
             plt.legend()
             plt.show()
+    
+        
     
