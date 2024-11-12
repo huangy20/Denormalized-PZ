@@ -150,8 +150,8 @@ for i in range(1,1348):
     # Load G and E matrices from files
     G, E, center,GI,size = load(file_path_E, file_path_G,file_path_c,file_path_GI)
     # Define the interval bounds a and b, and the half-space parameters c and b_val
-    a = np.zeros(size)
-    b = np.ones(size)
+    #a = np.zeros(size)
+    #b = np.ones(size)
     c = np.array([1.0,0.0])
     b_val = 1.205
     # Experiment logic: Try edge cases and increment the maximum depth until (1) verify the safety set (2) the depths that the running times are below 60 second

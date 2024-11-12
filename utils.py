@@ -26,7 +26,7 @@ def check_half_space_intersection(G, beta_min, beta_max, c, b, adjusted_value):
     return min_value + adjusted_value <= b
 
 def generate_pascal_triangle(n):
-    """ Generate Pascal's triangle up to the n-th row. """
+    """ Generate Pascal's triangle up to the n+1-th row. (fix) """ 
     triangle = [[1]]
     for i in range(1, n+1):
         row = [1]

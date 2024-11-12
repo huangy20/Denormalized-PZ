@@ -60,18 +60,13 @@ def depz_intersection(G, a, b, E, c, b_val, adjusted_vector, adjusted_value, mem
     # Do the cyclic splitting here
     split_index = (last_index + 1) % len(a)
 
-    # TODO: Why we can return right here? (fix)
-    if abs(b[split_index] - a[split_index]) < tolerance:
-        middle_point[split_index] = (a[split_index] + b[split_index]) / 2
-        return np.dot(c, middle_point) <= b_val
-
     # Do the splitting here
     split_a_1, split_b_1 = a.copy(), b.copy()
     split_b_1[split_index] = (a[split_index] + b[split_index]) / 2
     split_a_2, split_b_2 = a.copy(), b.copy()
     split_a_2[split_index] = (a[split_index] + b[split_index]) / 2
     
-    # Update the memory for having the new splitted range TODO: Think about if we should add 2 or 2n
+    # Update the memory for having the new splitted range
     mem_track[0] += (split_a_1.shape[0] + split_b_1.shape[0])
     mem_track[0] += (split_a_2.shape[0] + split_b_2.shape[0])
 
@@ -125,7 +120,7 @@ def exp_depz_intersect(start_idx, end_idx, exps, dataset='VanDelPol', print=True
             # Initialize the track variables
             mem_track = np.array([init_mem])
 
-            # Extact the corresponding direction, b_val and max_depth
+            # Extract the corresponding direction, b_val and max_depth
             c = np.array(exp[0])
             b_val = exp[1]
             max_depth = exp[2]

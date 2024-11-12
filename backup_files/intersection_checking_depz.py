@@ -88,11 +88,10 @@ for i in range(1,1348):
     b = np.ones(size)
     c = np.array([1.0,0.0])
     b_val = -2
-    
     alpha = -np.sign(GI@ c) # For all positive generators choose -1, else choose 1
     alpha_sum_vector = np.sum(alpha[:, np.newaxis] * GI, axis=0)
-    adjusted_vector = alpha_sum_vector + center.reshape(-1) # This vector guarantee to minize on dir of c
-    adjusted_value = np.dot(adjusted_vector, c) 
+    adjusted_vector = alpha_sum_vector + center.reshape(-1) # This vector guarantee to minize on dir of c 
+    adjusted_value = np.dot(adjusted_vector, c)
     # Check intersection with the half-space
     check = polynomial_zonotope_intersection(G, a, b, E, c, b_val)
     if check is True:
