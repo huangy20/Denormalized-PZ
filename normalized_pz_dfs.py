@@ -122,7 +122,7 @@ def nmpz_intersection(G, E, c, b_val, pascal_triangle, adjusted_vector, adjusted
 
 
 
-def exp_nmpz_intersect_dfs(start_idx, end_idx, exps, dataset='VanDelPol', print=True, save=True):
+def exp_nmpz_intersect_dfs(start_idx, end_idx, exps, dataset='VanDelPol', print=True, save=True, filename=None):
     '''
     This is the experiment wrapper for doing intersection checking using normalized pz with dfs approach
     over all the directions.
@@ -195,5 +195,8 @@ def exp_nmpz_intersect_dfs(start_idx, end_idx, exps, dataset='VanDelPol', print=
             elif check_result is None:
                 results[set_idx, exp_idx, 4] += 1
     if save:
-        np.savez(f'Results/{dataset}_nmpz_dfs.npz', results=results)
+        if filename is None:
+            np.savez(f'Results/{dataset}_nmpz_dfs.npz', results=results)
+        else:
+            np.savez(filename, results=results)
     return results

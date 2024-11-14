@@ -45,7 +45,7 @@ def print_result(check_result, i, time_usage):
     elif check_result is None:
         print(f"Case {i}: Inconclusive result - reached maximum recursion depth." + time_str)
 
-def demo_result(dataset, methods, methods_exps, plot=True):
+def demo_result(dataset, methods, methods_exps, plot=True, fn=None):
     # Loop through all the methods, then for each method, plot all the experiments in a single plot
     # Total of num_methods * num_experiments colors
     fontsize = 20
@@ -58,10 +58,12 @@ def demo_result(dataset, methods, methods_exps, plot=True):
     line_style = ['-', '--']
     for m, method in enumerate(methods):
         results_fn_prefix = f"{dataset}_{method}"
-        results_fn = "./Results/" + results_fn_prefix + ".npz"
+        if fn is None:
+            results_fn = "./Results/" + results_fn_prefix + ".npz"
+        else:
+            results_fn = fn
         results = np.load(results_fn)['results']
         exps = methods_exps[m]
-        exp_num = len(exps)
         # Plot the sum of memory over all experiments
         if plot:
             plt_x = np.arange(results.shape[0])
