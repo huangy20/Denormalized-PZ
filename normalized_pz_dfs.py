@@ -120,6 +120,100 @@ def nmpz_intersection(G, E, c, b_val, pascal_triangle, adjusted_vector, adjusted
     return None if result_1 is None or result_2 is None else False
 
 
+def exp_timeout_nmpx_intersect_dfs(start_idx, end_idx, exps, dataset='VanDelPol', 
+                                   do_print=True, save=True, filename=None, timeout=900):
+    '''
+    This is the experiment wrapper for doing intersection checking using normalized pz with dfs approach
+    over all the directions.
+    We measure:
+        1) number of intersection, no intersection, not decidable cases
+        2) computational time
+        3) memory and space usage 
+    Args:
+        dataset: the data set one would like to do the intersection checking experiment
+        start_idx, end_idx: the start and end index (end_idx excluded) to loop over 
+                            the user takes charge of matching this with the file names
+        exps: a list of tuples of experiment informations (requires unique directions)
+            (list representing the direction, corresponding b value, max_depth information)
+    '''
+
+    num_sets = end_idx - start_idx
+    num_dirs = len(exps)
+    
+    # Each result need to store: 0) computational time, 1) memory usage, 
+    #  2) # intersections, 3) # no intersections, 4) # undecidedable cases
+    results = np.zeros((num_sets, num_dirs, 5))
+    
+    # Set the signal to trigger the handler if time is exceeded
+    signal.signal(signal.SIGALRM, timeout_handler)
+
+    # First loop through all the sets
+    for i in range(start_idx, end_idx):
+        set_idx = i - 1
+        file_path_E = os.path.join(dataset, f'E_interval_{i}.mat')
+        file_path_G = os.path.join(dataset, f'G_interval_{i}.mat')
+        file_path_c = os.path.join(dataset, f'c_interval_{i}.mat')
+        file_path_GI = os.path.join(dataset, f'GI_interval_{i}.mat')
+
+        # Load G and E matrices from files and initialize the memory usage
+        G, E, center, GI, size = load(file_path_E, file_path_G,file_path_c,file_path_GI)
+        init_mem = int((G.shape[0] * G.shape[1]) + (E.shape[0] * E.shape[1]) + (GI.shape[0] * GI.shape[1]))
+        
+        # Since splitting would not change the max order, precompute the pascal triangle
+        max_order_E = np.max(E)
+        pascal_triangle = generate_pascal_triangle(max_order_E)
+
+        # Loop through all the directions and corresponding extreme values
+        for exp_idx, exp in enumerate(exps):
+            mem_track = np.array([init_mem])
+
+            # Extact the corresponding direction, b_val and max_depth
+            c = np.array(exp[0])
+            b_val = exp[1]
+            max_depth = exp[2]
+            
+            # Prepare the adjusted vector and value due to GI and c
+            alpha = -np.sign(GI@ c)
+            alpha_sum_vector = np.sum(alpha[:, np.newaxis] * GI, axis=0)
+            adjusted_vector = alpha_sum_vector + center.reshape(-1) 
+            adjusted_value = np.dot(adjusted_vector, c)
+            
+            # Main starting part of each experiment of each set
+            try:
+                signal.alarm(timeout)
+                start_time = time.time()
+                check_result = nmpz_intersection(G, E, c, b_val, pascal_triangle=pascal_triangle,
+                                                adjusted_vector=adjusted_vector, adjusted_value=adjusted_value, 
+                                                max_depth=max_depth, mem_track=mem_track)
+                # Here is the part where it successfully pass all the cases with a limited time FOR EACH CASE!
+                end_time = time.time()
+                time_usage = end_time - start_time
+                if do_print:
+                    print_result(check_result=check_result, i=i, time_usage=time_usage)
+                results[set_idx, exp_idx, 0] = time_usage # Store the time
+                results[set_idx, exp_idx, 1] = int(mem_track[0]) # Store the memory 
+                # Store the corresponding number of results. 
+                if check_result is True:
+                    results[set_idx, exp_idx, 2] += 1
+                elif check_result is False:
+                    results[set_idx, exp_idx, 3] += 1
+                elif check_result is None:
+                    results[set_idx, exp_idx, 4] += 1
+            except TimeoutError as e:
+                # Case of the timeout
+                if do_print:
+                    print(f"Reachable set {i} times out with time limited for each set {timeout}")
+                results[set_idx, exp_idx, 0] = time_usage # Store the time
+                results[set_idx, exp_idx, 1] = int(mem_track[0]) # Store the memory
+                results[set_idx, exp_idx, 4] += 1 # The amount of uncertain case increase 1
+            finally:
+                signal.alarm(0)
+    if save:
+        if filename is None:
+            np.savez(f'Results/{dataset}_nmpz_dfs.npz', results=results)
+        else:
+            np.savez(filename, results=results)
+    return results
 
 
 def exp_nmpz_intersect_dfs(start_idx, end_idx, exps, dataset='VanDelPol', print=True, save=True, filename=None):
@@ -162,7 +256,6 @@ def exp_nmpz_intersect_dfs(start_idx, end_idx, exps, dataset='VanDelPol', print=
 
         # Loop through all the directions and corresponding extreme values
         for exp_idx, exp in enumerate(exps):
-            # Initialize the track variables
             mem_track = np.array([init_mem])
 
             # Extact the corresponding direction, b_val and max_depth

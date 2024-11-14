@@ -2,6 +2,7 @@ import numpy as np
 import time
 import scipy.io
 import os
+import signal
 from collections import defaultdict
 import matplotlib.pyplot as plt
 
@@ -44,6 +45,10 @@ def print_result(check_result, i, time_usage):
         print(f"Case {i}: No intersection found." + time_str)
     elif check_result is None:
         print(f"Case {i}: Inconclusive result - reached maximum recursion depth." + time_str)
+
+# Define a handler that raises an exception when the time is exceeded
+def timeout_handler(signum, frame):
+    raise TimeoutError("Program exceeded the time limit.")
 
 def get_dataset_formal_name(dataset):
     d = {

@@ -1,0 +1,2 @@
+For problem laubLoomis_nmpz_dfs, with 0-th experiment has the following results:
+Total time: 6.085696697235107s, Num Intersect: 0.0,                 Num No Intersect: 1979.0, Num Undecidable: 20.0, max depth: 40
