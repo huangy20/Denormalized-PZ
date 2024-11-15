@@ -1,2 +1,0 @@
-For problem VanDelPol_nmpz_dfs, with 0-th experiment has the following results:
-Total time: 0.046159982681274414s, Num Intersect: 0.0,                 Num No Intersect: 1337.0, Num Undecidable: 11.0, max depth: 40

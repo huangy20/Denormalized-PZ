@@ -1,0 +1,3 @@
+For problem VanDelPol_nmpz, with 0-th experiment has the following results:
+Total time: 0.07320737838745117s, Num Intersect: 0.0,                 Num No Intersect: 1348.0, Num Undecidable: 0.0, max depth: 40
+Usage time is: 0.5842349529266357 seconds, dataset info: VanDelPol, experiment info: [([0, -1], -2.804, 40)]

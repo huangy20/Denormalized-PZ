@@ -60,11 +60,12 @@ def get_dataset_formal_name(dataset):
 def get_method_legend_name(method):
     d = {
         'depz' : "Denormalized PZ",
-        'nmpz_dfs': "Cyclic PZ"
+        'nmpz_dfs': "Cyclic PZ",
+        'cora': 'CORA'
     }
     return d[method]
 
-def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None):
+def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None, showcora=True):
     # Loop through all the methods, then for each method, plot all the experiments in a single plot
     # Total of num_methods * num_experiments colors
     fontsize = 20
@@ -72,9 +73,10 @@ def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None):
     if plot:
         plt.figure(figsize=(10, 6))
         #colors = plt.cm.viridis(np.linspace(0, 1, len(methods_exps) * len(methods_exps[0])))
-        colors = ['r', 'b']
+        colors = ['r', 'b', 'g']
     # Loop through all the methods
-    line_style = ['-', '--']
+    line_style = ['-', '--', '-.']
+    mem_compare_candiate =[]
     for m, method in enumerate(methods):
         results_fn_prefix = f"{dataset}_{method}"
         if fn is None:
@@ -87,6 +89,8 @@ def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None):
         if plot:
             plt_x = np.arange(results.shape[0])
             sum_mem_result = np.sum(results[:, :, 1], axis=1)
+            max_mem = int(np.max(sum_mem_result))
+            print(f"Data {dataset}, method {get_method_legend_name(method)} has max memory usage with {max_mem}")
             plt.semilogy(plt_x, sum_mem_result, label=f'{get_method_legend_name(method)}', 
                         color=colors[m], linestyle=line_style[m])
         # Loop through all the experiments
@@ -99,6 +103,18 @@ def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None):
             print(f"For problem {results_fn_prefix}, with {exp_idx}-th experiment has the following results:")
             print(f"Total time: {total_time}s, Num Intersect: {num_intersect}, \
                 Num No Intersect: {num_no_intersect}, Num Undecidable: {num_undecidable}, max depth: {max_depth}")
+    # Plot the core results:
+    if showcora:
+        cora_results_fn = f"./Results/cora_{dataset}_mem_time.npz"
+        cora_results = np.load(cora_results_fn)['cora_result']
+        if plot:
+            plt_x = np.arange(cora_results.shape[0])
+            cora_sum_mem_result = np.sum(cora_results[:, :, 1], axis=1)
+            max_mem = int(np.max(cora_sum_mem_result))
+            print(f"Data {dataset}, method {get_method_legend_name('cora')} has max memory usage with {max_mem}")
+            plt.semilogy(plt_x, cora_sum_mem_result, label=f'{get_method_legend_name('cora')}', 
+                        color=colors[2], linestyle=line_style[2])
+    
     if plot:
         # Label the plot
         plt.xlabel('Steps', fontsize=fontsize)
@@ -111,7 +127,7 @@ def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None):
         plt.show()
 
 
-def demo_result_time(dataset, methods, methods_exps, plot=True, fn=None):
+def demo_result_time(dataset, methods, methods_exps, plot=True, fn=None, showcora=True):
     # Loop through all the methods, then for each method, plot all the experiments in a single plot
     # Total of num_methods * num_experiments colors
     fontsize = 20
@@ -119,9 +135,9 @@ def demo_result_time(dataset, methods, methods_exps, plot=True, fn=None):
     if plot:
         plt.figure(figsize=(10, 6))
         #colors = plt.cm.viridis(np.linspace(0, 1, len(methods_exps) * len(methods_exps[0])))
-        colors = ['r', 'b']
+        colors = ['r', 'b', 'g']
     # Loop through all the methods
-    line_style = ['-', '--']
+    line_style = ['-', '--', '-.']
     for m, method in enumerate(methods):
         results_fn_prefix = f"{dataset}_{method}"
         if fn is None:
@@ -146,6 +162,15 @@ def demo_result_time(dataset, methods, methods_exps, plot=True, fn=None):
             print(f"For problem {results_fn_prefix}, with {exp_idx}-th experiment has the following results:")
             print(f"Total time: {total_time}s, Num Intersect: {num_intersect}, \
                 Num No Intersect: {num_no_intersect}, Num Undecidable: {num_undecidable}, max depth: {max_depth}")
+    # Plot the core results:
+    if showcora:
+        cora_results_fn = f"./Results/cora_{dataset}_mem_time.npz"
+        cora_results = np.load(cora_results_fn)['cora_result']
+        if plot:
+            plt_x = np.arange(cora_results.shape[0])
+            cora_sum_time_result = np.sum(cora_results[:, :, 0], axis=1)
+            plt.semilogy(plt_x, cora_sum_time_result, label=f'{get_method_legend_name('cora')}', 
+                        color=colors[2], linestyle=line_style[2])
     if plot:
         # Label the plot
         plt.xlabel('Steps', fontsize=fontsize)
@@ -157,5 +182,15 @@ def demo_result_time(dataset, methods, methods_exps, plot=True, fn=None):
         plt.legend(fontsize=fontsize)
         plt.show()
     
-        
+
+def process_mat(fn='cora_van_mem_time.mat', dataset='VanDelPol'):
+    from scipy.io import loadmat, savemat
+    save_nm = f"cora_{dataset}_mem_time.npz"
+    # Load the .mat file
+    matlab_data = loadmat(fn)
+
+    # Extract the matrix from the loaded data
+    matrix_np = matlab_data['result_mat']
+    np.savez(save_nm, cora_result=matrix_np)
+    
     
