@@ -90,7 +90,7 @@ def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None, showcora
             plt_x = np.arange(results.shape[0])
             sum_mem_result = np.sum(results[:, :, 1], axis=1)
             max_mem = int(np.max(sum_mem_result))
-            print(f"Data {dataset}, method {get_method_legend_name(method)} has max memory usage with {max_mem}")
+            print(f"Data {dataset}, method {get_method_legend_name(method)} has max memory usage with {max_mem}\n")
             plt.semilogy(plt_x, sum_mem_result, label=f'{get_method_legend_name(method)}', 
                         color=colors[m], linestyle=line_style[m])
         # Loop through all the experiments
@@ -102,7 +102,7 @@ def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None, showcora
             num_undecidable = np.sum(results[:, exp_idx, 4])
             print(f"For problem {results_fn_prefix}, with {exp_idx}-th experiment has the following results:")
             print(f"Total time: {total_time}s, Num Intersect: {num_intersect}, \
-                Num No Intersect: {num_no_intersect}, Num Undecidable: {num_undecidable}, max depth: {max_depth}")
+                Num No Intersect: {num_no_intersect}, Num Undecidable: {num_undecidable}, max depth: {max_depth}\n")
     # Plot the core results:
     if showcora:
         cora_results_fn = f"./Results/cora_{dataset}_mem_time.npz"
@@ -111,7 +111,7 @@ def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None, showcora
             plt_x = np.arange(cora_results.shape[0])
             cora_sum_mem_result = np.sum(cora_results[:, :, 1], axis=1)
             max_mem = int(np.max(cora_sum_mem_result))
-            print(f"Data {dataset}, method {get_method_legend_name('cora')} has max memory usage with {max_mem}")
+            print(f"Data {dataset}, method {get_method_legend_name('cora')} has max memory usage with {max_mem}\n")
             plt.semilogy(plt_x, cora_sum_mem_result, label=f'{get_method_legend_name('cora')}', 
                         color=colors[2], linestyle=line_style[2])
     
@@ -122,7 +122,7 @@ def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None, showcora
         plt.ylabel('Memory Result', fontsize=fontsize)
         plt.yticks(fontsize=fontsize)
         #plt.title(f'Memory usage comparison for {dataset}', fontsize=fontsize)
-        plt.title(f'Memory usage comparison for {get_dataset_formal_name(dataset)}', fontsize=fontsize)
+        plt.title(f'Memory Usage Comparison for {get_dataset_formal_name(dataset)}', fontsize=fontsize)
         plt.legend(fontsize=fontsize)
         plt.show()
 
@@ -161,7 +161,7 @@ def demo_result_time(dataset, methods, methods_exps, plot=True, fn=None, showcor
             num_undecidable = np.sum(results[:, exp_idx, 4])
             print(f"For problem {results_fn_prefix}, with {exp_idx}-th experiment has the following results:")
             print(f"Total time: {total_time}s, Num Intersect: {num_intersect}, \
-                Num No Intersect: {num_no_intersect}, Num Undecidable: {num_undecidable}, max depth: {max_depth}")
+                Num No Intersect: {num_no_intersect}, Num Undecidable: {num_undecidable}, max depth: {max_depth}\n")
     # Plot the core results:
     if showcora:
         cora_results_fn = f"./Results/cora_{dataset}_mem_time.npz"
@@ -178,8 +178,8 @@ def demo_result_time(dataset, methods, methods_exps, plot=True, fn=None, showcor
         plt.ylabel('Computation Time Result', fontsize=fontsize)
         plt.yticks(fontsize=fontsize)
         #plt.title(f'Memory usage comparison for {dataset}', fontsize=fontsize)
-        plt.title(f'Computation Time comparison for {get_dataset_formal_name(dataset)}', fontsize=fontsize)
-        plt.legend(fontsize=fontsize)
+        plt.title(f'Computation Time Comparison for {get_dataset_formal_name(dataset)}', fontsize=fontsize)
+        #plt.legend(fontsize=fontsize, loc='lower right')
         plt.show()
     
 
