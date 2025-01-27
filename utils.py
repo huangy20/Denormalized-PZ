@@ -118,7 +118,7 @@ def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None, showcora
             cora_sum_mem_result = np.sum(cora_results[:, :, 1], axis=1)
             max_mem = int(np.max(cora_sum_mem_result))
             print(f"Data {dataset}, method {get_method_legend_name('cora')} has max memory usage with {max_mem}\n")
-            plt.semilogy(plt_x, cora_sum_mem_result, label=f'{get_method_legend_name('cora')}', 
+            plt.semilogy(plt_x, cora_sum_mem_result, label=f"{get_method_legend_name('cora')}", 
                         color=colors[2], linestyle=line_style[2])
     
     if plot:
@@ -176,7 +176,7 @@ def demo_result_time(dataset, methods, methods_exps, plot=True, fn=None, showcor
         if plot:
             plt_x = np.arange(cora_results.shape[0])
             cora_sum_time_result = np.sum(cora_results[:, :, 0], axis=1)
-            plt.semilogy(plt_x, cora_sum_time_result, label=f'{get_method_legend_name('cora')}', 
+            plt.semilogy(plt_x, cora_sum_time_result, label=f"{get_method_legend_name('cora')}", 
                         color=colors[2], linestyle=line_style[2])
     if plot:
         # Label the plot
