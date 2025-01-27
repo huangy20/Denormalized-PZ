@@ -1,2 +1,0 @@
-Experiemnt 2 times out
-Usage time is: 1204.9175789356232 seconds, dataset info: laubLoomis, experiment info: [([1, 0, 0, 0, 0, 0, 0], 0.457, 40)]

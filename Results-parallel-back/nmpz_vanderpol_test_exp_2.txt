@@ -1,2 +1,0 @@
-Experiemnt 2 times out
-Usage time is: 899.997857093811 seconds, dataset info: VanDelPol, experiment info: [([0, 1], -2.73, 40)]

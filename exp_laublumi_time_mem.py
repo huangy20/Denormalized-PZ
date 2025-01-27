@@ -19,7 +19,7 @@ nmpz_exps = [([0, 0, 0, 0, 0, 0, 1], 0.137, 3), \
 
 
 start_idx = 1
-end_idx = 2000
+end_idx = 2000 + 1
 
 # Note user is taking charge of setting end_idx to the real_end + 1
 exp_depz_intersect(start_idx=start_idx, end_idx=end_idx, exps=depz_exps, dataset=dataset)

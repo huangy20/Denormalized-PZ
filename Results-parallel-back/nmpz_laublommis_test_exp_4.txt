@@ -1,3 +1,0 @@
-For problem laubLoomis_nmpz, with 0-th experiment has the following results:
-Total time: 23.501911878585815s, Num Intersect: 0.0,                 Num No Intersect: 1999.0, Num Undecidable: 0.0, max depth: 40
-Usage time is: 24.39486598968506 seconds, dataset info: laubLoomis, experiment info: [([0, 0, -1, 0, 0, 0, 0], -1.6505, 40)]
