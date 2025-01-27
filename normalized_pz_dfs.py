@@ -127,7 +127,7 @@ def exp_timeout_nmpx_intersect_dfs(start_idx, end_idx, exps, dataset='VanDelPol'
     over all the directions.
     We measure:
         1) number of intersection, no intersection, not decidable cases
-        2) computational time
+        2) computational time (for each set)
         3) memory and space usage 
     Args:
         dataset: the data set one would like to do the intersection checking experiment

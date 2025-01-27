@@ -1,0 +1,12 @@
+For problem VanDelPol_depz, with 0-th experiment has the following results:
+Total time: 0.8513510227203369s, Num Intersect: 0.0,                 Num No Intersect: 1348.0, Num Undecidable: 0.0, max depth: 40
+
+For problem VanDelPol_depz, with 1-th experiment has the following results:
+Total time: 0.5895206928253174s, Num Intersect: 0.0,                 Num No Intersect: 1348.0, Num Undecidable: 0.0, max depth: 40
+
+For problem VanDelPol_depz, with 2-th experiment has the following results:
+Total time: 13.72653579711914s, Num Intersect: 0.0,                 Num No Intersect: 1348.0, Num Undecidable: 0.0, max depth: 40
+
+For problem VanDelPol_depz, with 3-th experiment has the following results:
+Total time: 2.3674044609069824s, Num Intersect: 0.0,                 Num No Intersect: 1348.0, Num Undecidable: 0.0, max depth: 40
+

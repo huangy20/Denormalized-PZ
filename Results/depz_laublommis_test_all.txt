@@ -1,0 +1,18 @@
+For problem laubLoomis_depz, with 0-th experiment has the following results:
+Total time: 5.563828706741333s, Num Intersect: 0.0,                 Num No Intersect: 1999.0, Num Undecidable: 0.0, max depth: 40
+
+For problem laubLoomis_depz, with 1-th experiment has the following results:
+Total time: 3.4010009765625s, Num Intersect: 0.0,                 Num No Intersect: 1999.0, Num Undecidable: 0.0, max depth: 40
+
+For problem laubLoomis_depz, with 2-th experiment has the following results:
+Total time: 2.3399884700775146s, Num Intersect: 0.0,                 Num No Intersect: 1999.0, Num Undecidable: 0.0, max depth: 40
+
+For problem laubLoomis_depz, with 3-th experiment has the following results:
+Total time: 1.9871604442596436s, Num Intersect: 0.0,                 Num No Intersect: 1999.0, Num Undecidable: 0.0, max depth: 40
+
+For problem laubLoomis_depz, with 4-th experiment has the following results:
+Total time: 2.2983999252319336s, Num Intersect: 0.0,                 Num No Intersect: 1999.0, Num Undecidable: 0.0, max depth: 40
+
+For problem laubLoomis_depz, with 5-th experiment has the following results:
+Total time: 2.9893200397491455s, Num Intersect: 0.0,                 Num No Intersect: 1999.0, Num Undecidable: 0.0, max depth: 40
+

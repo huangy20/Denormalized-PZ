@@ -2,6 +2,10 @@ import signal, sys, argparse
 from denormalized_pz import *
 from normalized_pz_dfs import *
 
+'''
+This experiment is set up for timing over each single set, not all the sets. Not used in the paper 
+'''
+
 # Example running command:  python3 Laublumi_time_each_set_exp.py --exp_idx 0 --timeout 5
 parser = argparse.ArgumentParser(description="Run experiment with specified index and timeout.")
 parser.add_argument('--exp_idx', type=int, default=1, help='Index of the experiment to run')

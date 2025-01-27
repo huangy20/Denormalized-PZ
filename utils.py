@@ -65,6 +65,10 @@ def get_method_legend_name(method):
     }
     return d[method]
 
+def get_mat_name(dataset):
+    name_table = {'VanDelPol':'van', 'laubLoomis':'laub'}
+    return name_table[dataset]
+
 def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None, showcora=True):
     # Loop through all the methods, then for each method, plot all the experiments in a single plot
     # Total of num_methods * num_experiments colors
@@ -105,6 +109,8 @@ def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None, showcora
                 Num No Intersect: {num_no_intersect}, Num Undecidable: {num_undecidable}, max depth: {max_depth}\n")
     # Plot the core results:
     if showcora:
+        load_mat_fn = f'./Results/cora_{get_mat_name(dataset=dataset)}_mem_time.mat'
+        process_mat(fn=load_mat_fn, dataset=dataset)
         cora_results_fn = f"./Results/cora_{dataset}_mem_time.npz"
         cora_results = np.load(cora_results_fn)['cora_result']
         if plot:
@@ -121,10 +127,9 @@ def demo_result_mem(dataset, methods, methods_exps, plot=True, fn=None, showcora
         plt.xticks(fontsize=fontsize)
         plt.ylabel('Memory Result', fontsize=fontsize)
         plt.yticks(fontsize=fontsize)
-        #plt.title(f'Memory usage comparison for {dataset}', fontsize=fontsize)
         plt.title(f'Memory Usage Comparison for {get_dataset_formal_name(dataset)}', fontsize=fontsize)
         plt.legend(fontsize=fontsize)
-        plt.show()
+        plt.savefig(f"./Results/{dataset}_mem_plot.png")
 
 
 def demo_result_time(dataset, methods, methods_exps, plot=True, fn=None, showcora=True):
@@ -164,6 +169,8 @@ def demo_result_time(dataset, methods, methods_exps, plot=True, fn=None, showcor
                 Num No Intersect: {num_no_intersect}, Num Undecidable: {num_undecidable}, max depth: {max_depth}\n")
     # Plot the core results:
     if showcora:
+        load_mat_fn = f'./Results/cora_{get_mat_name(dataset=dataset)}_mem_time.mat'
+        process_mat(fn=load_mat_fn, dataset=dataset)
         cora_results_fn = f"./Results/cora_{dataset}_mem_time.npz"
         cora_results = np.load(cora_results_fn)['cora_result']
         if plot:
@@ -177,20 +184,18 @@ def demo_result_time(dataset, methods, methods_exps, plot=True, fn=None, showcor
         plt.xticks(fontsize=fontsize)
         plt.ylabel('Computation Time Result', fontsize=fontsize)
         plt.yticks(fontsize=fontsize)
-        #plt.title(f'Memory usage comparison for {dataset}', fontsize=fontsize)
         plt.title(f'Computation Time Comparison for {get_dataset_formal_name(dataset)}', fontsize=fontsize)
-        #plt.legend(fontsize=fontsize, loc='lower right')
-        plt.show()
+        plt.savefig(f"./Results/{dataset}_time_plot.png")
     
 
 def process_mat(fn='cora_van_mem_time.mat', dataset='VanDelPol'):
     from scipy.io import loadmat, savemat
-    save_nm = f"cora_{dataset}_mem_time.npz"
+    save_nm = f"./Results/cora_{dataset}_mem_time.npz"
     # Load the .mat file
     matlab_data = loadmat(fn)
 
     # Extract the matrix from the loaded data
     matrix_np = matlab_data['result_mat']
     np.savez(save_nm, cora_result=matrix_np)
-    
+
     
