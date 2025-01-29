@@ -1,6 +1,7 @@
 FROM python:3.13
 
-ADD . .
+WORKDIR /app
+ADD . /app
 
 RUN pip3 install numpy scipy matplotlib
 
